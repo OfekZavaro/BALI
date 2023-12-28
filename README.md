@@ -48,4 +48,5 @@ Future Improvements:
   8. User-Generated Lists:
     o	Allow users to create and share curated lists of favorite places.
 
-
+UI Design-
+https://www.figma.com/file/UujqlUYrr2nnJ9iSg8svxv/Bali?type=design&node-id=0%3A1&mode=design&t=XmsevBgMqJJDQEoS-1
