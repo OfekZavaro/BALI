@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "177127389125",
+    "project_id": "bali-720e6",
+    "storage_bucket": "bali-720e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177127389125:android:6df6e53790858854ac7dac",
+        "android_client_info": {
+          "package_name": "com.example.bali"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7HJpPSlBAajo9kXV8UAP4VDN7v198eaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
