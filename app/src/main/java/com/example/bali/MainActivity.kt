@@ -1,5 +1,6 @@
 package com.example.bali
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -20,13 +21,16 @@ class MainActivity : AppCompatActivity() {
     //FirebaseFirestore firestore;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
+//        // Start the Welcome activity
+//        val intent = Intent(this, Welcome::class.java)
+//        startActivity(intent)
+//
+//        // Finish the MainActivity
+//        finish()
+//
+
         //val id = "uniqueUserId"
         //val database = Firebase.database
         //val userRef = database.getReference("users").child(id)
