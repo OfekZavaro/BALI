@@ -5,4 +5,15 @@
     <string name="home" />
     <string name="profile" />
     <string name="home2" />
+    <string name="register">הרשמה</string>
+    <string name="fullName">שם מלא</string>
+    <string name="email">אימייל</string>
+    <string name="password">סיסמה</string>
+    <string name="registerBtn">הירשם</string>
+    <string name="LoginTitle">כניסה</string>
+    <string name="loginBtn">כניסה</string>
+    <string name="signUpLink">משתמש חדש?הירשם!</string>
+    <string name="loginLink">כבר יש לך משתמש? לחץ כאן!</string>
+    <string name="title_register">ברוכים הבאים,\nהרשמה</string>
+    <string name="title_login">ברוכים הבאים,\nכניסה</string>
 </resources>

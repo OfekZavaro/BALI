@@ -21,8 +21,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="176dp"
-        android:text="@string/title_register"
+        android:text="@string/title_login"
         android:textColor="@color/dark_green"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -31,7 +30,7 @@
         app:layout_constraintHorizontal_bias="0.873"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.741" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -41,20 +40,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView">
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/fullNameInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fullNameInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:hint="@string/fullName"/>
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailInputLayout"
@@ -97,22 +82,22 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/signUpButton"
+            android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:text="@string/registerBtn"
+            android:text="@string/loginBtn"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF" />
 
         <TextView
-            android:id="@+id/login_link"
+            android:id="@+id/signup_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/loginLink"
+            android:text="@string/signUpLink"
             android:layout_gravity="center"
             android:textColor="@color/my_light_primary"
             android:layout_marginTop="8dp"
