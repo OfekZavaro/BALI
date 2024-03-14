@@ -1,11 +1,13 @@
 package com.example.bali.database.dao
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.example.bali.database.entities.Post
 
+@Dao
 interface PostDao {
     @Insert
     fun insertPost(post: Post)
@@ -22,6 +24,6 @@ interface PostDao {
     @Query("SELECT * FROM posts WHERE id = :postId")
     fun getPostById(postId: Int): Post?
 
-    @Query("SELECT * FROM posts WHERE userId = :userId ORDER BY date DESC")
+    @Query("SELECT * FROM posts WHERE userId = :userId ")
     fun getPostsByUserId(userId: Int): List<Post>
 }

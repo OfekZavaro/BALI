@@ -2,6 +2,9 @@
     <string name="app_name">Bali</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home" />
+    <string name="profile" />
+    <string name="home2" />
     <string name="register">הרשמה</string>
     <string name="fullName">שם מלא</string>
     <string name="email">אימייל</string>
