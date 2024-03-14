@@ -1,10 +1,11 @@
 package com.example.bali.database.dao
 
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.example.bali.database.entities.User
-
+@Dao
 interface UserDao {
     @Query("SELECT * FROM users WHERE id = :id")
     fun getUserById(id: Int): User?
