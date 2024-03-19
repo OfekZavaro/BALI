@@ -13,4 +13,14 @@
     <string name="loginLink">כבר יש לך משתמש? לחץ כאן!</string>
     <string name="title_register">ברוכים הבאים,\nהרשמה</string>
     <string name="title_login">ברוכים הבאים,\nכניסה</string>
+    <string name="profileTitle">פרופיל</string>
+    <string name="userFullName">דני הגבר</string>
+    <string name="userMail">danihagever@gmail.com</string>
+    <string name="btnLogoutText">התנתק</string>
+    <string name="edit_profile_dialog_title">עריכת פרופיל</string>
+    <string name="edit_profile_dialog_message">ערוך את פרטי הפרופיל שלך</string>
+    <string name="save">שמור</string>
+    <string name="cancel">בטל</string>
+    <string name="select_profile_pic_button_text">בחר תמונה</string>
+    <string name="profile_name_hint">שם מלא</string>
 </resources>
