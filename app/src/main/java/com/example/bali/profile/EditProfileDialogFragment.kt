@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
@@ -13,7 +14,10 @@ import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.example.bali.R
+import com.example.bali.shared.SharedViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.squareup.picasso.Picasso
 
@@ -21,6 +25,9 @@ class EditProfileDialogFragment : DialogFragment() {
     private lateinit var imageViewProfilePic: ImageView
     private lateinit var pickImageContract: ActivityResultLauncher<Intent>
     private lateinit var userMetaData: UserMetaData
+    private var selectedImageUri: Uri? = null
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val viewModel: ProfileViewModel by viewModels()
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -34,27 +41,28 @@ class EditProfileDialogFragment : DialogFragment() {
         pickImageContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
-                val selectedImageUri: Uri? = data?.data
+                selectedImageUri= data?.data
                 selectedImageUri?.let {
                     // Load and display the selected image in the ImageView using Picasso
                     Picasso.get().load(selectedImageUri).into(imageViewProfilePic)
-                    // Save the URI for future use if needed
-                    // currentProfilePicUrl = selectedImageUri.toString()
                 }
             }
         }
-        // Receive data passed from ProfileFragment
-        val currentName = arguments?.getString("currentName")
-        val currentProfilePicUrl = arguments?.getString("currentProfilePicUrl")
+
 
         // Pre-fill the EditText field with the current name
-        editTextProfileName.setText(currentName)
+        editTextProfileName.setText(sharedViewModel.userMetaData.fullName)
 
-        // Load and display the current profile picture in the ImageView using Picasso
-        currentProfilePicUrl?.let {
-            Picasso.get().load(it).into(imageViewProfilePic)
+        // Fetch and display the profile photo from ProfileViewModel
+        val defaultPhotoResourceId = R.drawable.profile_photo_placeholder
+        val defaultPhotoUri = Uri.parse("android.resource://${requireContext().packageName}/$defaultPhotoResourceId")
+        viewModel.fetchProfilePhoto(defaultPhotoUri)
+        viewModel.profilePhotoUrl.observe(this) { photoUrl ->
+            Picasso.get().load(photoUrl)
+                .placeholder(R.drawable.profile_photo_placeholder)
+                .error(R.drawable.profile_photo_placeholder)
+                .into(imageViewProfilePic)
         }
-
         // Set click listener for selecting profile picture
         buttonSelectProfilePic.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -67,10 +75,17 @@ class EditProfileDialogFragment : DialogFragment() {
             .setPositiveButton(R.string.save) { dialog, which ->
                 // Handle save button click
                 val newName = editTextProfileName.text.toString()
-                // Update profile with newName if it's different from the current name
-                if (newName != currentName) {
-//                     // Call function to update user name
-//                    // viewModel.updateUserName(userMetaData, newName)
+                Log.d("TAG", "selectedImageUri: $selectedImageUri")
+                // // Update profile with newName if it's different from the current name or if a new profile picture has been selected
+                if (newName != sharedViewModel.userMetaData.fullName || selectedImageUri != null) {
+                    if (newName != sharedViewModel.userMetaData.fullName) {
+                        viewModel.updateUserName(sharedViewModel.userMetaData, newName)
+                        sharedViewModel.userMetaData.fullName = newName
+                    }
+                    selectedImageUri?.let { uri ->
+                        viewModel.uploadProfileImage(sharedViewModel.userMetaData, uri)
+                        sharedViewModel.userMetaData.profilePhoto = uri.toString()
+                    }
                 }
             }
             .setNegativeButton(R.string.cancel) { dialog, which ->

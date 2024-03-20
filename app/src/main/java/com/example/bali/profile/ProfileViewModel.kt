@@ -1,11 +1,13 @@
 package com.example.bali.profile
 
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.bali.signup.UserProperties
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -13,10 +15,12 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 
+
 class ProfileViewModel : ViewModel() {
 
     private val _profilePhotoUrl = MutableLiveData<String>()
     val profilePhotoUrl: LiveData<String> get() = _profilePhotoUrl
+
 
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String> get() = _userName
@@ -90,11 +94,14 @@ class ProfileViewModel : ViewModel() {
                                 _profilePhotoUrl.value = uri.toString()
                             }.addOnFailureListener {
                                 // Handle failure to update profile photo URL in database
+
+
                             }
                     }
                 }
                 .addOnFailureListener {
                     // Handle failure to upload photo
+                    Log.d("TAG", "Failed to upload profile photo: ${it.message}")
                 }
         }
     }
@@ -106,7 +113,9 @@ class ProfileViewModel : ViewModel() {
             databaseRef.child("fullName").setValue(newName)
                 .addOnSuccessListener {
                     // User name updated successfully
+                    Log.d("TAG", "_userName: ${_userName.value}")
                     _userName.value = newName
+                    Log.d("TAG", "_userName: ${_userName.value}")
                 }
                 .addOnFailureListener {
                     // Handle failure to update user name

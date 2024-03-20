@@ -3,6 +3,7 @@ package com.example.bali.profile
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,8 @@ import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
 
-    private val viewModel: ProfileViewModel by viewModels()
+    private val viewModel: ProfileViewModel by
+    viewModels()
     private lateinit var profileImageView: ImageView
     private lateinit var nameTextView: TextView
     private lateinit var emailTextView: TextView
@@ -78,16 +80,17 @@ class ProfileFragment : Fragment() {
 
     private fun observeUserData() {
         viewModel.userName.observe(viewLifecycleOwner) { name ->
+            Log.d("TAG", "observeUserData: $name")
             // Update UI with user's name
             nameTextView.text = name
-            // Store the current name for editing profile
-            currentName = name
+
         }
 
         val userEmail = viewModel.fetchUserEmail()
         // Update UI with user's email
         emailTextView.text = userEmail
     }
+
 
     private fun logoutUser() {
         auth.signOut()
