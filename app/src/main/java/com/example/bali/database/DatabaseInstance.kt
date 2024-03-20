@@ -14,8 +14,9 @@ object DatabaseInstance {
                 context.applicationContext,
                 BaliDatabase::class.java,
                 "bali_database"
-            ).build()
-
+            )
+                .fallbackToDestructiveMigration()
+                .build()
             INSTANCE = instance
             instance
         }
