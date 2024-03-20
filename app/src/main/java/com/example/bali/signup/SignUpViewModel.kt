@@ -26,7 +26,7 @@ class SignUpViewModel : ViewModel() {
                 val userId = authResult.user?.uid
                 if (userId != null) {
                     val userRef = firebaseDatabase.reference.child("Users").child(userId)
-                    val user = createUserMap(userProperties)
+                    val user = createUserMap(userId,userProperties)
 
                     userRef.setValue(user)
                         .addOnSuccessListener {
@@ -44,10 +44,10 @@ class SignUpViewModel : ViewModel() {
             }
     }
 
-    private fun createUserMap(userProperties: UserProperties): Map<String, Any> {
+    private fun createUserMap(userId: String,userProperties: UserProperties): Map<String, Any> {
         val userMap = HashMap<String, Any>()
         userMap["fullName"] = userProperties.fullName
-        userMap["userId"] = UUID.randomUUID().toString() // Generate unique user ID
+        userMap["userId"] = userId
         return userMap
     }
 }

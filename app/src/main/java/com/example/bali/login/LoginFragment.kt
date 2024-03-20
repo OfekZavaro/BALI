@@ -16,6 +16,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.bali.MainActivity
 import com.example.bali.R
+import com.example.bali.profile.ProfileFragment
+import com.example.bali.shared.SharedViewModel
 import com.example.bali.signup.SignUpActivity
 import com.example.bali.signup.UserProperties
 
@@ -29,6 +31,7 @@ class LoginFragment : Fragment() {
     private lateinit var signupLink:TextView
 //    private lateinit var messageBox : TextView
     private lateinit var progressBarLogin: ProgressBar
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,14 +72,25 @@ class LoginFragment : Fragment() {
     private fun observeLoginResult() {
         loginViewModel.loginResult.observe(viewLifecycleOwner) { result: Pair<HashMap<String,Any>, String> ->
             if (result.first.isNotEmpty()) {
+                updateSharedViewModel(result)
 //                closeKeyboard(requireContext(), requireView())
 //                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                // Navigate to the ProfileFragment using an explicit intent
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_container, ProfileFragment())
+                transaction.addToBackStack(null) // Optional: Allows the user to navigate back to the previous fragment
+                transaction.commit()
                 Toast.makeText(requireContext(), "login success", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(requireContext(), "login faild", Toast.LENGTH_SHORT).show()
             }
             progressBarLogin.visibility = View.GONE
         }
+    }
+    private fun updateSharedViewModel(result: Pair<HashMap<String, Any>, String>) {
+        sharedViewModel.userMetaData.email = result.second
+        sharedViewModel.userMetaData.fullName = result.first["fullName"].toString()
+        sharedViewModel.userMetaData.profilePhoto = result.first["profilePhoto"].toString()
     }
 
     private fun handleLoginClick(loginButton:Button) {
