@@ -1,32 +1,38 @@
 package com.example.bali
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.example.bali.homePage.HomePageFragment
-import com.example.bali.utils.Utils.initializeDatabaseWithPlace
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
+import com.example.bali.databinding.ActivityMainBinding // Assuming you are using View Binding
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        /*
-        // initialize the database with a new place
-        lifecycleScope.launch(Dispatchers.IO) {
-            initializeDatabaseWithPlace(this@MainActivity.application)
-        }*/
-        /*
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Now setup the HomePageFragment or any other initial fragment
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, HomePageFragment())
-                .commit()
-        }*/
+        // Setup the nav controller for use with the NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+
+
+        // If you have a Toolbar, ActionBar, or BottomNavigationView, set them up with the navController here
+        // Example for a Toolbar
+        // setSupportActionBar(binding.toolbar)
+        // NavigationUI.setupActionBarWithNavController(this, navController)
+
+        // Example for BottomNavigationView
+        // NavigationUI.setupWithNavController(binding.bottomNav, navController)
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+        }
 }

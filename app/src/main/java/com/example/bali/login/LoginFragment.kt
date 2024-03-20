@@ -14,8 +14,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.bali.MainActivity
 import com.example.bali.R
+import com.example.bali.homePage.HomePageFragment
 import com.example.bali.profile.ProfileFragment
 import com.example.bali.shared.SharedViewModel
 import com.example.bali.signup.SignUpActivity
@@ -74,12 +76,15 @@ class LoginFragment : Fragment() {
             if (result.first.isNotEmpty()) {
                 updateSharedViewModel(result)
 //                closeKeyboard(requireContext(), requireView())
-//                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 // Navigate to the ProfileFragment using an explicit intent
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container, ProfileFragment())
-                transaction.addToBackStack(null) // Optional: Allows the user to navigate back to the previous fragment
-                transaction.commit()
+                //findNavController().navigate(R.id.action_loginFragment_to_homePageFragment)
+                // In LoginActivity, after a successful login
+                val intent = Intent(requireActivity(), MainActivity::class.java)
+                startActivity(intent)
+//                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//                transaction.replace(R.id.fragment_container, HomePageFragment())
+//                transaction.addToBackStack(null) // Optional: Allows the user to navigate back to the previous fragment
+//                transaction.commit()
                 Toast.makeText(requireContext(), "login success", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(requireContext(), "login faild", Toast.LENGTH_SHORT).show()
