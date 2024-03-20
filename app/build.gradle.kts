@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("kapt")
     id("com.google.gms.google-services")
 }
 
@@ -16,6 +17,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -32,17 +34,20 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
-
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.room.common)
+
     //implementation(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.firebase.database)
@@ -56,7 +61,31 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     annotationProcessor ("androidx.room:room-compiler:2.4.0-beta01")
     implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
+    implementation ("com.google.firebase:firebase-storage-ktx:20.3.0")
+    implementation ("com.google.firebase:firebase-auth-ktx:22.3.0")
     implementation("com.google.firebase:firebase-analytics")
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+    implementation ("androidx.fragment:fragment-ktx:1.3.6")
+    implementation ("com.google.android.material:material:1.11.0")
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
+    implementation ("com.squareup.picasso:picasso:2.71828")
+
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.3.0")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.3.0")
+
+    implementation ("com.google.firebase:firebase-firestore-ktx:24.10.0")
+    implementation ("com.google.firebase:firebase-storage:20.3.0")
+    implementation ("com.google.firebase:firebase-database:20.3.0")
+    implementation ("com.google.firebase:firebase-firestore:24.10.0")
+    implementation ("com.firebaseui:firebase-ui-storage:8.0.2")
+    implementation("com.google.firebase:firebase-auth:22.3.0")
+
 }
 
 
