@@ -1,0 +1,35 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homePageFragment">
+
+    <fragment
+        android:id="@+id/placeFragment"
+        android:name="com.example.bali.places.PlaceFragment"
+        android:label="fragment_place"
+        tools:layout="@layout/fragment_place">
+        <action
+            android:id="@+id/action_placeFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homePageFragment"
+        android:name="com.example.bali.homePage.HomePageFragment"
+        android:label="fragment_home_page"
+        tools:layout="@layout/fragment_home_page">
+
+        <action
+            android:id="@+id/action_homePageFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+
+        <!-- Any other actions -->
+    </fragment>
+
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.example.bali.post.PostFragment"
+        android:label="fragment_post"
+        tools:layout="@layout/fragment_post" />
+</navigation>

@@ -15,12 +15,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-
         /*
-        // Call your function to initialize the database with a new place
+        // initialize the database with a new place
         lifecycleScope.launch(Dispatchers.IO) {
             initializeDatabaseWithPlace(this@MainActivity.application)
-        }
+        }*/
+        /*
 
         // Now setup the HomePageFragment or any other initial fragment
         if (savedInstanceState == null) {

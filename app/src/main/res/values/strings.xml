@@ -16,4 +16,5 @@
     <string name="loginLink">כבר יש לך משתמש? לחץ כאן!</string>
     <string name="title_register">ברוכים הבאים,\nהרשמה</string>
     <string name="title_login">ברוכים הבאים,\nכניסה</string>
+    <string name="go_back"> חזור </string>
 </resources>

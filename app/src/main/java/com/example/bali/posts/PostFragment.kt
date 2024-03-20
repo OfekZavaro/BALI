@@ -1,60 +1,123 @@
-package com.example.bali.posts
+package com.example.bali.post
 
+
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.bali.R
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.bali.databinding.FragmentPostBinding
+import com.example.bali.posts.PostViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PostFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PostFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var _binding: FragmentPostBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: PostViewModel by viewModels()
+
+    // Variable to hold the selected image URI
+    private var selectedImageUri: Uri? = null
+
+    // ActivityResultLauncher for the image picker
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            binding.imageViewUploadedPhoto.setImageURI(uri)
+            selectedImageUri = uri
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_post, container, false)
+    ): View {
+        _binding = FragmentPostBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PostFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PostFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Retrieve placeName from the arguments passed to this fragment
+        val placeName = arguments?.getString("placeName") ?: "Unknown"
+
+        binding.buttonChoosePhoto.setOnClickListener {
+            // Launch the image picker
+            imagePickerLauncher.launch("image/*")
+        }
+
+        binding.buttonSubmitComment.setOnClickListener {
+            val commentText = binding.inputComment.text.toString()
+            //val userId = getCurrentUserId()
+            val userId = "af1f8508-2145-4e40-b112-ad5003b5e40f"
+
+            selectedImageUri?.let { uri ->
+                if (userId != null && commentText.isNotEmpty()) {
+                    uploadImageToFirebaseStorage(uri) { photoUrl ->
+                        viewModel.createPost(userId, commentText, photoUrl, placeName ?: "Unknown",
+                            onSuccess = {
+                                // Navigate back only on success
+                                findNavController().navigateUp()
+                            },
+                            onFailure = { e ->
+                                // Log the error or show an error message
+                                Log.e("PostFragment", "Failed to create post", e)
+                                Toast.makeText(requireContext(), "Failed to create post", Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "הוסף תגובה", Toast.LENGTH_SHORT).show()
+                }
+            } ?: run {
+                Toast.makeText(requireContext(), "בבקשה הוסף תמונה", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Handle clicks on the go back icon
+        binding.goBackIcon.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun getCurrentUserId(): String? {
+        val user = FirebaseAuth.getInstance().currentUser
+        return user?.uid
+    }
+
+    private fun uploadImageToFirebaseStorage(imageUri: Uri, callback: (String) -> Unit) {
+        val storageRef = FirebaseStorage.getInstance().reference
+        val imagesRef = storageRef.child("images/${System.currentTimeMillis()}_${imageUri.lastPathSegment}")
+        val uploadTask = imagesRef.putFile(imageUri)
+
+        uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
                 }
             }
+            imagesRef.downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+                callback(downloadUri.toString())
+            } else {
+                // Handle the error
+                task.exception?.message?.let {
+                    // Show error message to the user
+                }
+            }
+        }
     }
 }

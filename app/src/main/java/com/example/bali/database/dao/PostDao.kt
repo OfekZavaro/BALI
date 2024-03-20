@@ -1,5 +1,6 @@
 package com.example.bali.database.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -10,20 +11,20 @@ import com.example.bali.database.entities.Post
 @Dao
 interface PostDao {
     @Insert
-    fun insertPost(post: Post)
+    suspend fun insertPost(post: Post)
 
     @Update
-    fun updatePost(post: Post)
+    suspend fun updatePost(post: Post)
 
     @Delete
-    fun deletePost(post: Post)
+    suspend fun deletePost(post: Post)
 
     @Query("SELECT * FROM posts")
-    fun getAllPosts(): List<Post>
+    fun getAllPosts(): LiveData<List<Post>>
 
     @Query("SELECT * FROM posts WHERE id = :postId")
     fun getPostById(postId: Int): Post?
 
     @Query("SELECT * FROM posts WHERE userId = :userId ")
-    fun getPostsByUserId(userId: Int): List<Post>
+    fun getPostsByUserId(userId: String): LiveData<List<Post>>
 }

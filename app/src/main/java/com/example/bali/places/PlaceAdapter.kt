@@ -2,18 +2,21 @@ package com.example.bali.places
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bali.database.entities.Place
 import com.example.bali.databinding.FragmentPlaceBinding
+import com.squareup.picasso.Picasso
+
 //import com.bumptech.glide.Glide
 
-class PlaceAdapter : ListAdapter<Place, PlaceAdapter.PlaceViewHolder>(PlaceDiffCallback()) {
+class PlaceAdapter(private val clickListener: PlaceClickListener) : ListAdapter<Place, PlaceAdapter.PlaceViewHolder>(PlaceDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
         val binding = FragmentPlaceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PlaceViewHolder(binding)
+        return PlaceViewHolder(binding, clickListener)
     }
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
@@ -21,13 +24,25 @@ class PlaceAdapter : ListAdapter<Place, PlaceAdapter.PlaceViewHolder>(PlaceDiffC
         holder.bind(place)
     }
 
-    class PlaceViewHolder(private val binding: FragmentPlaceBinding) : RecyclerView.ViewHolder(binding.root) {
+    class PlaceViewHolder(private val binding: FragmentPlaceBinding, private val clickListener: PlaceClickListener) : RecyclerView.ViewHolder(binding.root) {
         fun bind(place: Place) {
             binding.textViewPlaceName.text = place.name
             binding.textViewPlaceAddress.text = place.address
-            // If you're using Glide to load images:
-            // Glide.with(binding.imageViewPhoto.context).load(place.placePhoto).into(binding.imageViewPhoto)
+
+            Picasso.get().invalidate(place.placePhoto)
+            Picasso.get()
+                .load(place.placePhoto)
+                .into(binding.imageViewPhoto as ImageView)
+
+            // Set up click listener for the "Add Comment" button
+            binding.buttonAddComment.setOnClickListener {
+                clickListener.onAddCommentClicked(place.name)
+            }
         }
+    }
+
+    interface PlaceClickListener {
+        fun onAddCommentClicked(placeName: String)
     }
 }
 
