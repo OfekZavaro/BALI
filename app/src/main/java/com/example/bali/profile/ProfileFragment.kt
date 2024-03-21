@@ -11,18 +11,21 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.bali.R
 import com.example.bali.Welcome
+import com.example.bali.shared.SharedViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 
 
 class ProfileFragment : Fragment() {
 
     private val viewModel: ProfileViewModel by
-    viewModels()
-    private lateinit var profileImageView: ImageView
+    activityViewModels()
+    private lateinit var profileImageView: CircleImageView
     private lateinit var nameTextView: TextView
     private lateinit var emailTextView: TextView
     private lateinit var logoutButton: Button
@@ -83,7 +86,7 @@ class ProfileFragment : Fragment() {
             Log.d("TAG", "observeUserData: $name")
             // Update UI with user's name
             nameTextView.text = name
-
+            currentName=name
         }
 
         val userEmail = viewModel.fetchUserEmail()

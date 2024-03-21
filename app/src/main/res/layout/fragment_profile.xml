@@ -32,11 +32,12 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profileImageView"
-                    android:layout_width="216dp"
-                    android:layout_height="208dp"
-                    android:src="@drawable/avater"
+                    android:layout_width="154dp"
+                    android:layout_height="145dp"
+                    android:src="@drawable/profile_photo_placeholder"
+                    android:background="@drawable/circle_background"
                     app:layout_constraintBottom_toTopOf="@+id/imageView4"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

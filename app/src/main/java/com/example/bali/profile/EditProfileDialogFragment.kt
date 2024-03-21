@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.bali.R
 import com.example.bali.shared.SharedViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -26,8 +27,11 @@ class EditProfileDialogFragment : DialogFragment() {
     private lateinit var pickImageContract: ActivityResultLauncher<Intent>
     private lateinit var userMetaData: UserMetaData
     private var selectedImageUri: Uri? = null
-    private val sharedViewModel: SharedViewModel by activityViewModels()
-    private val viewModel: ProfileViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by lazy {
+        ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+    }
+    private val viewModel: ProfileViewModel by activityViewModels()
+
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -37,6 +41,7 @@ class EditProfileDialogFragment : DialogFragment() {
         val editTextProfileName = view.findViewById<EditText>(R.id.editTextProfileName)
          imageViewProfilePic = view.findViewById<ImageView>(R.id.imageViewProfilePic)
         val buttonSelectProfilePic = view.findViewById<Button>(R.id.buttonSelectProfilePic)
+        val currentName = arguments?.getString("currentName")
         // Initialize pickImageContract
         pickImageContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -51,7 +56,8 @@ class EditProfileDialogFragment : DialogFragment() {
 
 
         // Pre-fill the EditText field with the current name
-        editTextProfileName.setText(sharedViewModel.userMetaData.fullName)
+        Log.d("TAG","sharedViewModel.userMetaData.fullName: ${sharedViewModel.userMetaData.fullName}")
+        editTextProfileName.setText(currentName)
 
         // Fetch and display the profile photo from ProfileViewModel
         val defaultPhotoResourceId = R.drawable.profile_photo_placeholder
@@ -79,6 +85,7 @@ class EditProfileDialogFragment : DialogFragment() {
                 // // Update profile with newName if it's different from the current name or if a new profile picture has been selected
                 if (newName != sharedViewModel.userMetaData.fullName || selectedImageUri != null) {
                     if (newName != sharedViewModel.userMetaData.fullName) {
+                        Log.d("TAG", "sharedViewModel.userMetaData.fullName: ${sharedViewModel.userMetaData.fullName}")
                         viewModel.updateUserName(sharedViewModel.userMetaData, newName)
                         sharedViewModel.userMetaData.fullName = newName
                     }
