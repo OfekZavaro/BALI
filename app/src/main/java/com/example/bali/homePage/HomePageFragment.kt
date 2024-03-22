@@ -53,6 +53,11 @@ class HomePageFragment : Fragment(), PlaceAdapter.PlaceClickListener {
         findNavController().navigate(R.id.action_homePageFragment_to_postFragment, bundle)
     }
 
+    override fun onViewCommentsClicked(placeName: String) {
+        val bundle = bundleOf("placeName" to placeName)
+        findNavController().navigate(R.id.action_homePageFragment_to_commentsFragment, bundle)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

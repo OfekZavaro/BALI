@@ -54,8 +54,7 @@ class PostFragment : Fragment() {
 
         binding.buttonSubmitComment.setOnClickListener {
             val commentText = binding.inputComment.text.toString()
-            //val userId = getCurrentUserId()
-            val userId = "af1f8508-2145-4e40-b112-ad5003b5e40f"
+            val userId = getCurrentUserId()
 
             selectedImageUri?.let { uri ->
                 if (userId != null && commentText.isNotEmpty()) {
