@@ -2,6 +2,7 @@ package com.example.bali.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -31,9 +32,9 @@ class LoginFragment : Fragment() {
     private lateinit var passwordInput : EditText
     private lateinit var loginButton: Button
     private lateinit var signupLink:TextView
-//    private lateinit var messageBox : TextView
     private lateinit var progressBarLogin: ProgressBar
-    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private lateinit var sharedViewModel: SharedViewModel
+//    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,8 +48,8 @@ class LoginFragment : Fragment() {
         passwordInput = view.findViewById(R.id.passwordInput)
         loginButton = view.findViewById(R.id.login_button)
         signupLink = view.findViewById<TextView>(R.id.signup_link)
-//        messageBox = view.findViewById(R.id.message_box)
         progressBarLogin = view.findViewById(R.id.progress_bar)
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         handleLoginClick(loginButton)
         handleSignUpClick(signupLink)
@@ -75,6 +76,7 @@ class LoginFragment : Fragment() {
         loginViewModel.loginResult.observe(viewLifecycleOwner) { result: Pair<HashMap<String,Any>, String> ->
             if (result.first.isNotEmpty()) {
                 updateSharedViewModel(result)
+                Log.d("TAG","result:${result}")
 //                closeKeyboard(requireContext(), requireView())
                 // Navigate to the ProfileFragment using an explicit intent
                 //findNavController().navigate(R.id.action_loginFragment_to_homePageFragment)

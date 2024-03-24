@@ -1,5 +1,6 @@
 package com.example.bali.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,29 +20,35 @@ class LoginViewModel : ViewModel() {
         auth = FirebaseAuth.getInstance()
         auth.signInWithEmailAndPassword(credentials.email, credentials.password)
             .addOnSuccessListener { authResult ->
-                val userId = authResult.user?.uid
-                if (userId != null) {
+                val user = authResult.user
+                user?.let { firebaseUser ->
+                    val userId = firebaseUser.uid
                     // Retrieve user data from Realtime Database
                     firebaseDatabase.reference.child("Users").child(userId)
                         .addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 val userData = dataSnapshot.value as HashMap<String, Any>?
-                                if (userData != null) {
-                                    _loginResult.value = Pair(userData, userId)
-                                } else {
+                                userData?.let {
+                                    // Emit login result with user data and email
+                                    _loginResult.value = Pair(userData, firebaseUser.email ?: "")
+                                } ?: run {
+                                    // User data is null
                                     _loginResult.value = Pair(hashMapOf(), "")
                                 }
                             }
 
                             override fun onCancelled(databaseError: DatabaseError) {
+                                // Handle database error
                                 _loginResult.value = Pair(hashMapOf(), "")
                             }
                         })
-                } else {
+                } ?: run {
+                    // Auth user is null
                     _loginResult.value = Pair(hashMapOf(), "")
                 }
             }
             .addOnFailureListener { exception ->
+                // Handle failure to sign in
                 _loginResult.value = Pair(hashMapOf(), "")
             }
     }

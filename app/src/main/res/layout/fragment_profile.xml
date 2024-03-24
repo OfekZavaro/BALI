@@ -10,7 +10,10 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="25dp"
+        tools:ignore="ExtraText">
+        android:layout_above="@id/navigationBarFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,13 +33,14 @@
                     android:src="@drawable/arc_3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:contentDescription="@string/for_background" />
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profileImageView"
-                    android:layout_width="216dp"
-                    android:layout_height="208dp"
-                    android:src="@drawable/avater"
+                    android:layout_width="154dp"
+                    android:layout_height="145dp"
+                    android:src="@drawable/profile_photo_placeholder"
                     app:layout_constraintBottom_toTopOf="@+id/imageView4"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -44,12 +48,13 @@
 
                 <ImageView
                     android:id="@+id/editProfileButton"
-                    android:layout_width="41dp"
-                    android:layout_height="37dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:src="@drawable/update_icon"
                     app:layout_constraintBottom_toTopOf="@+id/imageView4"
                     android:clickable="true"
                     android:focusable="true"
+                    android:contentDescription="@string/edit_profile_description"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.678"
                     app:layout_constraintStart_toStartOf="parent"
@@ -97,7 +102,39 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/btnLogoutText" />
 
+            <TextView
+                android:id="@+id/titleMyPostsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:text="@string/my_comments"
+                android:layout_margin="10dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/userCommentRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profileImageView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </LinearLayout>
+
     </ScrollView>
+    <!-- Bottom navigation bar -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/navigationBarFragment"
+        android:name="com.example.bali.components.NavigationBarFragment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
