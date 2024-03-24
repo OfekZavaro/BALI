@@ -9,5 +9,6 @@ data class Place(
     val name: String,
     val address: String,
     val description: String,
-    val placePhoto: String
+    val placePhoto: String,
+    var rating: Float = 0f
 )

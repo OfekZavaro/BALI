@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.bali.database.entities.Place
 
 
@@ -19,4 +20,8 @@ interface PlaceDao {
 
     @Query("SELECT * FROM places WHERE name = :placeName")
     fun getPlaceById(placeName: String): LiveData<Place>
+
+    @Update
+    suspend fun updatePlace(place: Place)
+
 }

@@ -31,6 +31,7 @@ class PlaceFragment : Fragment() {
                     binding.textViewPlaceName.text = it.name
                     binding.textViewPlaceAddress.text = it.address
                     binding.textViewPlaceDescription.text = it.description
+//                    viewModel.fetchPlaceRating(it) // Fetch rating for the place
                     /*
                     Picasso.get().invalidate(it.placePhoto)
                     Picasso.get()
