@@ -29,6 +29,10 @@
             android:id="@+id/action_homePageFragment_to_postFragment"
             app:destination="@id/postFragment" />
 
+        <action
+            android:id="@+id/action_homePageFragment_to_commentsFragment"
+            app:destination="@id/commentsFragment" />
+
         <!-- Any other actions -->
     </fragment>
 
@@ -37,6 +41,12 @@
         android:name="com.example.bali.post.PostFragment"
         android:label="fragment_post"
         tools:layout="@layout/fragment_post" />
+
+    <fragment
+        android:id="@+id/commentsFragment"
+        android:name="com.example.bali.allPosts.CommentsFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_comments" />
 <!--    <fragment-->
 <!--        android:id="@+id/editCommentDialogFragment"-->
 <!--        android:name="com.example.bali.profile.EditCommentDialogFragment"-->

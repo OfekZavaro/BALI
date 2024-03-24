@@ -38,11 +38,16 @@ class PlaceAdapter(private val clickListener: PlaceClickListener) : ListAdapter<
             binding.buttonAddComment.setOnClickListener {
                 clickListener.onAddCommentClicked(place.name)
             }
+
+            binding.buttonViewComments.setOnClickListener {
+                clickListener.onViewCommentsClicked(place.name)
+            }
         }
     }
 
     interface PlaceClickListener {
         fun onAddCommentClicked(placeName: String)
+        fun onViewCommentsClicked(placeName: String)
     }
 }
 
