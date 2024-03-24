@@ -8,7 +8,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bali.database.entities.Place
 import com.example.bali.databinding.FragmentPlaceBinding
+import com.example.bali.placesApiService.PlaceResponse
+import com.example.bali.placesApiService.PlacesApiService
 import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.Callback
+import retrofit2.converter.gson.GsonConverterFactory
 
 //import com.bumptech.glide.Glide
 
@@ -24,8 +31,29 @@ class PlaceAdapter(private val clickListener: PlaceClickListener) : ListAdapter<
         holder.bind(place)
     }
 
+
     class PlaceViewHolder(private val binding: FragmentPlaceBinding, private val clickListener: PlaceClickListener) : RecyclerView.ViewHolder(binding.root) {
         fun bind(place: Place) {
+            val retrofit = Retrofit.Builder()
+                .baseUrl("https://maps.googleapis.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val service = retrofit.create(PlacesApiService::class.java)
+            service.findPlaceFromText(place.name,fields = "name,rating",apiKey="AIzaSyBsV4dpcOTGvGNpk3C8Zdm_viZAGui4C1k").enqueue(object : Callback<PlaceResponse> {
+                override fun onResponse(call: Call<PlaceResponse>, response: Response<PlaceResponse>) {
+                    if (response.isSuccessful) {
+                        val rating = response.body()?.candidates?.firstOrNull()?.rating
+                        // Update your UI with the rating
+                        binding.textViewPlaceRating.text = "Rating: ${rating}"
+                    }
+                }
+
+                override fun onFailure(call: Call<PlaceResponse>, t: Throwable) {
+                    // Handle failure
+                    }
+            })
+
             binding.textViewPlaceName.text = place.name
             binding.textViewPlaceAddress.text = place.address
 

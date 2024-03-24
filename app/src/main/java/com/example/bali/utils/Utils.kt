@@ -17,10 +17,11 @@ object Utils {
             val imageUrl = downloadUri.toString()
 
             val place = Place(
-                name = "Tader Place3",
-                address = "Some Address3",
+                name = "קפה מאייר",
+                address = "שדרות רוטשילד 9",
                 description = "Some Description3",
-                placePhoto = imageUrl
+                placePhoto = imageUrl,
+                rating = 0f
             )
             // Get your Room database and Dao
             val db = DatabaseInstance.getDatabase(application)

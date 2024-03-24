@@ -24,6 +24,14 @@
         android:gravity="right"
         android:text="שם המקום" />
 
+    <TextView
+        android:id="@+id/textViewPlaceRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="16sp"
+        android:text="Rating: 0.0" />
+
     <!-- TextView for the place address -->
     <TextView
         android:id="@+id/textViewPlaceAddress"

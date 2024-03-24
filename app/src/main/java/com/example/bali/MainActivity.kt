@@ -8,6 +8,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.bali.databinding.ActivityMainBinding // Assuming you are using View Binding
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         // Setup the nav controller for use with the NavHostFragment
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
+
 
 
         // If you have a Toolbar, ActionBar, or BottomNavigationView, set them up with the navController here

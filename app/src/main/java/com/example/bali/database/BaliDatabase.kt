@@ -9,7 +9,7 @@ import com.example.bali.database.entities.Place
 import com.example.bali.database.entities.Post
 import com.example.bali.database.entities.User
 
-@Database(entities = [User::class, Place::class, Post::class], version = 3)
+@Database(entities = [User::class, Place::class, Post::class], version = 5)
 abstract class BaliDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun placeDao(): PlaceDao
