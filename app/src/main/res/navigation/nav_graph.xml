@@ -37,4 +37,18 @@
         android:name="com.example.bali.post.PostFragment"
         android:label="fragment_post"
         tools:layout="@layout/fragment_post" />
+<!--    <fragment-->
+<!--        android:id="@+id/editCommentDialogFragment"-->
+<!--        android:name="com.example.bali.profile.EditCommentDialogFragment"-->
+<!--        android:label="fragment_edit_comment"-->
+<!--        tools:layout="@layout/fragment_edit_comment_dialog">-->
+<!--        <argument-->
+<!--            android:name="commentId"-->
+<!--            app:argType="string" />-->
+<!--    </fragment>-->
+
+<!--    <action-->
+<!--        android:id="@+id/action_profileFragment_to_editCommentDialogFragment"-->
+<!--        app:destination="@id/editCommentDialogFragment" />-->
+
 </navigation>

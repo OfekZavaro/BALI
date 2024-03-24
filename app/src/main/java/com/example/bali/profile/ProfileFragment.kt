@@ -13,6 +13,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.bali.R
 import com.example.bali.Welcome
 import com.example.bali.shared.SharedViewModel
@@ -21,10 +24,12 @@ import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
 
-class ProfileFragment : Fragment() {
 
-    private val viewModel: ProfileViewModel by
-    activityViewModels()
+
+class ProfileFragment : Fragment() , CommentAdapter.EditClickListener, CommentAdapter.DeleteClickListener{
+
+    private val viewModel: ProfileViewModel by activityViewModels()
+    private lateinit var commentRecyclerView: RecyclerView
     private lateinit var profileImageView: CircleImageView
     private lateinit var nameTextView: TextView
     private lateinit var emailTextView: TextView
@@ -47,6 +52,9 @@ class ProfileFragment : Fragment() {
         emailTextView=view.findViewById(R.id.emailTextView)
         logoutButton=view.findViewById(R.id.logoutButton)
         editProfileButton=view.findViewById(R.id.editProfileButton)
+        // Initialize RecyclerView
+        commentRecyclerView = view.findViewById(R.id.userCommentRecyclerView)
+        commentRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         return view
     }
 
@@ -54,6 +62,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeProfilePhoto()
         observeUserData()
+        observeUserComments()
         auth = FirebaseAuth.getInstance()
         logoutButton.setOnClickListener {
             logoutUser()
@@ -69,6 +78,17 @@ class ProfileFragment : Fragment() {
         viewModel.fetchProfilePhoto(defaultPhotoUri)
         viewModel.fetchUserName()
         viewModel.fetchUserEmail()
+        viewModel.fetchUserComments()
+    }
+
+    private fun observeUserComments() {
+        viewModel.userComments.observe(viewLifecycleOwner) { comments ->
+            // Update RecyclerView with the list of comments
+            commentRecyclerView.adapter = CommentAdapter(comments).apply {
+                editClickListener = this@ProfileFragment
+                deleteClickListener = this@ProfileFragment
+            }
+        }
     }
 
     private fun observeProfilePhoto() {
@@ -111,6 +131,38 @@ class ProfileFragment : Fragment() {
             }
         }
         dialogFragment.show(parentFragmentManager, "EditProfileDialogFragment")
+    }
+
+    override fun onEditClick(position: Int) {
+        // Retrieve the comment at the given position
+        val comment = viewModel.userComments.value?.get(position)
+        // Open a dialog fragment to edit the comment
+//        comment?.let {
+//            val action = ProfileFragmentDirections.actionProfileFragmentToEditCommentDialogFragment(commentId = it.commentId)
+//            findNavController().navigate(action)
+//        }
+        // Open a dialog fragment to edit the comment
+        comment?.let {
+            val args = Bundle().apply {
+                putString("commentId", it.commentId)
+            }
+
+            val editCommentDialogFragment = EditCommentDialogFragment().apply {
+                arguments = args
+            }
+
+            editCommentDialogFragment.show(parentFragmentManager, "EditCommentDialogFragment")
+        }
+    }
+
+    override fun onDeleteClick(position: Int) {
+        // Retrieve the comment at the given position
+        val comment = viewModel.userComments.value?.get(position)
+
+        //delete the comment from the database
+        comment?.let {
+            viewModel.deleteComment(comment.commentId)
+        }
     }
 
 }

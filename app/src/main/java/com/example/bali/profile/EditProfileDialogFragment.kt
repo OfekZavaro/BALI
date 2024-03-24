@@ -25,7 +25,6 @@ import com.squareup.picasso.Picasso
 class EditProfileDialogFragment : DialogFragment() {
     private lateinit var imageViewProfilePic: ImageView
     private lateinit var pickImageContract: ActivityResultLauncher<Intent>
-    private lateinit var userMetaData: UserMetaData
     private var selectedImageUri: Uri? = null
     private val sharedViewModel: SharedViewModel by lazy {
         ViewModelProvider(requireActivity())[SharedViewModel::class.java]

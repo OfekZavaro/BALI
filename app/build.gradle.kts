@@ -3,7 +3,9 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     kotlin("kapt")
     id("com.google.gms.google-services")
+    id("androidx.navigation.safeargs.kotlin")
 }
+
 
 android {
     namespace = "com.example.bali"

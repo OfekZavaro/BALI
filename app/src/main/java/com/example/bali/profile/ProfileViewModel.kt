@@ -21,12 +21,41 @@ class ProfileViewModel : ViewModel() {
     private val _profilePhotoUrl = MutableLiveData<String>()
     val profilePhotoUrl: LiveData<String> get() = _profilePhotoUrl
 
-
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String> get() = _userName
 
+    private val _userComments = MutableLiveData<List<Comment>>()
+    val userComments: LiveData<List<Comment>> get() = _userComments
+
     private val storage = FirebaseStorage.getInstance()
+    private val database = FirebaseDatabase.getInstance()
     private val currentUser = FirebaseAuth.getInstance().currentUser
+
+    fun fetchUserComments() {
+        Log.d("TAG","hello")
+        currentUser?.uid?.let { userId ->
+            val commentsRef = database.getReference("posts").orderByChild("userId").equalTo(userId)
+            commentsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val commentsList = mutableListOf<Comment>()
+                    for (commentSnapshot in snapshot.children) {
+                        val commentId = commentSnapshot.key ?: ""
+                        val placeName = commentSnapshot.child("placeName").getValue(String::class.java) ?: ""
+                        val commentText = commentSnapshot.child("comment").getValue(String::class.java) ?: ""
+                        val photoUrl = commentSnapshot.child("photo").getValue(String::class.java) ?: ""
+                        val comment = Comment(commentId,placeName, commentText, photoUrl)
+                        commentsList.add(comment)
+                    }
+                    Log.d("TAG","commentsList:$commentsList")
+                    _userComments.value = commentsList
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle database error
+                }
+            })
+        }
+    }
 
     fun fetchProfilePhoto(defaultPhotoUri: Uri) {
         if (currentUser != null) {
@@ -123,7 +152,55 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
+    fun deleteComment(commentId: String) {
+        // Get a reference to the comments node in the database
+        val commentsRef = database.getReference("posts")
 
+        // Delete the comment with the specified commentId
+        commentsRef.child(commentId).removeValue()
+            .addOnSuccessListener {
+                // Comment deleted successfully
+                Log.d("ProfileViewModel", "Comment deleted successfully")
+                // Remove the deleted comment from the userComments LiveData
+                val updatedCommentsList = _userComments.value.orEmpty().toMutableList()
+                updatedCommentsList.removeAll { it.commentId == commentId }
+                _userComments.value = updatedCommentsList
+            }
+            .addOnFailureListener { exception ->
+                // Failed to delete comment
+                Log.e("ProfileViewModel", "Error deleting comment", exception)
+            }
 
+    }
+
+    fun updateComment(updatedComment: Comment) {
+        // Get a reference to the comments node in the database
+        val commentsRef = database.getReference("posts")
+
+        // Create a map to hold the updated properties
+        val commentUpdates = HashMap<String, Any>()
+
+        // Update the specific properties you want to change
+        commentUpdates["comment"] = updatedComment.comment
+        commentUpdates["photoUrl"] = updatedComment.photoUrl
+        // Update the comment with the specified commentId
+        commentsRef.child(updatedComment.commentId).updateChildren(commentUpdates)
+            .addOnSuccessListener {
+                // Comment updated successfully
+                Log.d("ProfileViewModel", "Comment updated successfully")
+
+                // Update the comment in the userComments LiveData
+                val updatedCommentsList = _userComments.value.orEmpty().toMutableList()
+                val index = updatedCommentsList.indexOfFirst { it.commentId == updatedComment.commentId }
+                if (index != -1) {
+                    updatedCommentsList[index] = updatedComment
+                    _userComments.value = updatedCommentsList
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Failed to update comment
+                Log.e("ProfileViewModel", "Error updating comment", exception)
+            }
+    }
 
 }
