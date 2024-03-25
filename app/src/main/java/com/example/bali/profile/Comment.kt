@@ -4,5 +4,5 @@ data class Comment(
     val commentId: String,
     val placeName: String,
     val comment: String,
-    var photoUrl: String
+    var photo: String
 )

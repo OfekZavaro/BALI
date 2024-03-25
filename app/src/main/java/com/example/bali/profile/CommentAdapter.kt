@@ -35,7 +35,7 @@ class CommentAdapter(private val comments: List<Comment>) : RecyclerView.Adapter
             itemView.findViewById<TextView>(R.id.placeNameTextView).text = comment.placeName
             itemView.findViewById<TextView>(R.id.commentTextView).text = comment.comment
             // Load image using Picasso or Glide
-            Picasso.get().load(comment.photoUrl).into(itemView.findViewById<ImageView>(R.id.photoImageView))
+            Picasso.get().load(comment.photo).into(itemView.findViewById<ImageView>(R.id.photoImageView))
         }
     }
 
