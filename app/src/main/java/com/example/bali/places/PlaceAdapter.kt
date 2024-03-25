@@ -56,6 +56,7 @@ class PlaceAdapter(private val clickListener: PlaceClickListener) : ListAdapter<
 
             binding.textViewPlaceName.text = place.name
             binding.textViewPlaceAddress.text = place.address
+            binding.textViewPlaceDescription.text = place.description
 
             Picasso.get().invalidate(place.placePhoto)
             Picasso.get()

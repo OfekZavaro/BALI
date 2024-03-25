@@ -9,20 +9,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 object Utils {
-    fun initializeDatabaseWithPlace(application: Application) {
-        // Define the reference to your image in Firebase Storage
-        val storageReference = FirebaseStorage.getInstance().getReference("TaderPlace.png")
+    fun initializeDatabaseWithPlace(application: Application, imageUrl: String, name: String, address: String, description: String) {
+
+        val storageReference = FirebaseStorage.getInstance().getReference(imageUrl)
         // Start the download of the URL
         storageReference.downloadUrl.addOnSuccessListener { downloadUri ->
             val imageUrl = downloadUri.toString()
-
+            // Directly use the imageUrl parameter
             val place = Place(
-                name = "קפה מאייר",
-                address = "שדרות רוטשילד 9",
-                description = "Some Description3",
+                name = name,
+                address = address,
+                description = description,
                 placePhoto = imageUrl,
-                rating = 0f
+                rating = 0f // Assuming the initial rating is 0 for all new places
             )
+
             // Get your Room database and Dao
             val db = DatabaseInstance.getDatabase(application)
             val placeDao = db.placeDao()
@@ -30,8 +31,6 @@ object Utils {
             CoroutineScope(Dispatchers.IO).launch {
                 placeDao.insertPlace(place)
             }
-        }.addOnFailureListener {
-            // Handle any errors in case the download URL could not be retrieved
         }
     }
 

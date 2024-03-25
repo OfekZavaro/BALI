@@ -29,7 +29,13 @@ class Welcome : AppCompatActivity() {
         }
 
         // initialize the database with a new place
-        //Utils.initializeDatabaseWithPlace(application)
+
+        Utils.initializeDatabaseWithPlace(application, "cafeEurope.jpg", "קפה אירופה", "שדרות רוטשילד 9, תל אביב-יפו", "מסעדה צנועה עם חצר שבה מגישים מנות יצירתיות, עם תפריט בראנץ', יינות וקוקטיילים.")
+        Utils.initializeDatabaseWithPlace(application, "sunyoung.jpg", "סאן יאנג", "ברנר 14, תל אביב-יפו", "מסעדת פיוז'ן אסיאתי מודרנית שבה מגישים סושי, ארוחות בוקר מקומיות וסטייקים במתחם מסוגנן ומאוורר.")
+        Utils.initializeDatabaseWithPlace(application, "rustico.jpg", "רוסטיקו רוטשילד", "שדרות רוטשילד 15, תל אביב-יפו", "נמצאת בלב של תל אביב, ברחוב היפה והמרכזי ביותר של העיר. קחו לעצמכם פסק זמן קטן ותנו קפיצה לאיטליה באמצע היום או במהלך הערב.")
+        Utils.initializeDatabaseWithPlace(application, "mayer.jpg", "קפה מאייר", "דיזנגוף 98, תל אביב-יפו", "ביסטרו ים תיכוני המשלב בין אווירה פריזאית לחומרי גלם מעולים מאגן הים התיכון בו כל אחד יכול למצוא את עצמו בכל שעה ביום.")
+        Utils.initializeDatabaseWithPlace(application, "emesh.jpg", "אמש", "לילינבלום 30, תל אביב-יפו", "בר/מסעדה אופנתי עם תאורה דרמטית, מרפסת גדולה ותוססת בחצר ומתחם אירועים")
+
 
         val registerButton: Button = findViewById(R.id.create_account_button)
         val loginButton: Button = findViewById(R.id.login_button)
