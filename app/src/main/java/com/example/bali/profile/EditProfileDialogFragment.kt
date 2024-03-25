@@ -70,7 +70,9 @@ class EditProfileDialogFragment : DialogFragment() {
         }
         // Set click listener for selecting profile picture
         buttonSelectProfilePic.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "image/*"
+            }
             pickImageContract.launch(intent)
         }
 
