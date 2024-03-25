@@ -42,7 +42,7 @@ class EditCommentDialogFragment : DialogFragment() {
             val comment = viewModel.userComments.value?.find { it.commentId == id }
             comment?.let {
                 editTextCommentText.setText(comment.comment)
-                Picasso.get().load(comment.photoUrl).into(imageViewCommentPhoto)
+                Picasso.get().load(comment.photo).into(imageViewCommentPhoto)
             }
         }
         // Initialize pickImageContract
@@ -59,7 +59,9 @@ class EditCommentDialogFragment : DialogFragment() {
 
         // Set click listener for selecting comment photo
         buttonSelectCommentPhoto.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "image/*"
+            }
             pickImageContract.launch(intent)
         }
 
@@ -76,10 +78,11 @@ class EditCommentDialogFragment : DialogFragment() {
                         var updatedComment = it.copy(comment = newText)
                         selectedImageUri?.let { uri ->
                             // If a new photo is selected, update the comment's photo URL
-                            updatedComment.photoUrl = uri.toString()
+                            uploadImageAndUpdateComment(updatedComment, uri)
+                        }?:run {
+                            // Update the comment in the ViewModel
+                            viewModel.updateComment(updatedComment)
                         }
-                        // Update the comment in the ViewModel
-                        viewModel.updateComment(updatedComment)
                     }
                 }
             }
@@ -87,5 +90,15 @@ class EditCommentDialogFragment : DialogFragment() {
                 // Handle cancel button click
             }
             .create()
+    }
+
+    private fun uploadImageAndUpdateComment(comment: Comment, imageUri: Uri) {
+        // Upload image to Firebase Storage
+        viewModel.uploadImageToFirebaseStorage(imageUri) { photoUrl ->
+            // Update comment photo URL with the new photo URL
+            val updatedComment = comment.copy(photo = photoUrl)
+            // Update the comment in the ViewModel
+            viewModel.updateComment(updatedComment)
+        }
     }
 }

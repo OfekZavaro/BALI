@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import java.util.UUID
 
 
 class ProfileViewModel : ViewModel() {
@@ -182,7 +183,7 @@ class ProfileViewModel : ViewModel() {
 
         // Update the specific properties you want to change
         commentUpdates["comment"] = updatedComment.comment
-        commentUpdates["photoUrl"] = updatedComment.photoUrl
+        commentUpdates["photo"] = updatedComment.photo
         // Update the comment with the specified commentId
         commentsRef.child(updatedComment.commentId).updateChildren(commentUpdates)
             .addOnSuccessListener {
@@ -201,6 +202,31 @@ class ProfileViewModel : ViewModel() {
                 // Failed to update comment
                 Log.e("ProfileViewModel", "Error updating comment", exception)
             }
+    }
+
+    fun uploadImageToFirebaseStorage(imageUri: Uri, callback: (String) -> Unit) {
+        val storageRef = FirebaseStorage.getInstance().reference
+        val imagesRef = storageRef.child("images/${UUID.randomUUID()}_${imageUri.lastPathSegment}")
+        val uploadTask = imagesRef.putFile(imageUri)
+
+        uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            imagesRef.downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+                callback(downloadUri.toString())
+            } else {
+                // Handle the error
+                task.exception?.message?.let {
+                    // Show error message to the user
+                }
+            }
+        }
     }
 
 }

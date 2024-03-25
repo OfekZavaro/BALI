@@ -29,7 +29,7 @@
     <string name="go_back"> חזור </string>
     <string name="the_comment">the comment</string>
     <string name="the_place_name">the place name</string>
-    <string name="my_comments">my comments</string>
+    <string name="my_comments">התגובות שלי</string>
     <string name="delete_comment_button">delete comment</string>
     <string name="edit_button_description">edit comment</string>
     <string name="the_comment_field">תגובה</string>

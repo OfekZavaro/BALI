@@ -85,14 +85,14 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="23sp"
-                android:text="@string/userFullName" />
+                 />
 
             <TextView
                 android:id="@+id/emailTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:text="@string/userMail" />
+                />
 
             <Button
                 android:id="@+id/logoutButton"
